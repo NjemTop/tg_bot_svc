@@ -32,7 +32,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             if is_valid:
                 user_data[user_id]['email'] = update.message.text
                 user_info = user_data[user_id]
-                
+
                 await update.message.reply_text(
                     f"Спасибо за вашу заявку!\n\n"
                     f"Имя: {user_info['name']}\n"
@@ -41,7 +41,7 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
                     "Мы скоро с вами свяжемся!"
                 )
 
-                # Отправляем данные на сервер
+                # Отправляем данные на сервер с повторными попытками
                 await send_request(user_info)
 
                 # Очищаем данные пользователя после отправки
