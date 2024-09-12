@@ -4,7 +4,21 @@ from utils.logger import logger
 import time
 
 async def send_request(user_info: dict, max_retries: int = 5, timeout: int = 30) -> None:
-    """Отправка данных на сервер с повторными попытками и тайм-аутом."""
+    """
+    Отправляет данные пользователя на сервер с использованием API.
+
+    При ошибках отправки функция осуществляет повторные попытки (по умолчанию 3 раза) с паузами между ними.
+    Также используется тайм-аут для каждого запроса.
+
+    Аргументы:
+        user_info (dict): Словарь с данными пользователя (имя, номер телефона).
+            Пример: {'name': 'Иван', 'phone': '+1234567890'}
+        max_retries (int): Максимальное количество попыток отправки запроса (по умолчанию 3).
+        timeout (int): Тайм-аут запроса в секундах (по умолчанию 30 секунд).
+
+    Возвращает:
+        None
+    """
     attempt = 0
     while attempt < max_retries:
         try:
@@ -14,8 +28,7 @@ async def send_request(user_info: dict, max_retries: int = 5, timeout: int = 30)
             # Отправляем запрос на сервер
             response = requests.post(API_URL, json={
                 'name': user_info['name'],
-                'phone': user_info['phone'],
-                'email': user_info['email']
+                'phone': user_info['phone']
             }, timeout=timeout)
 
             # Проверка статуса ответа
@@ -39,4 +52,4 @@ async def send_request(user_info: dict, max_retries: int = 5, timeout: int = 30)
             time.sleep(30)  # Ждем 30 секунд перед повторной попыткой
 
     # Если после всех попыток данные не отправлены, логируем это
-    logger.critical(f"Не удалось отправить данные для пользователя {user_info['name']} ({user_info['phone']}, {user_info['email']}) после {max_retries} попыток.")
+    logger.critical(f"Не удалось отправить данные для пользователя {user_info['name']} ({user_info['phone']}) после {max_retries} попыток.")

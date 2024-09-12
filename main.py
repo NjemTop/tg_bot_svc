@@ -14,7 +14,7 @@ def main() -> None:
     # Регистрируем обработчик нажатий на кнопки
     application.add_handler(CallbackQueryHandler(button_handler))
 
-    # Регистрируем обработчик сообщений (для ввода имени, телефона, email)
+    # Регистрируем обработчик сообщений (для ввода имени, телефона)
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
 
     # Запускаем бота
